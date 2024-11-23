@@ -1,3 +1,4 @@
+import { TableBody } from '@/app/components/table'
 import { supabaseApi } from '@/lib/supabase'
 
 interface DataPerson {
@@ -5,56 +6,48 @@ interface DataPerson {
 	name: string
 	age: number
 	profession: string
+	imageSrc?: string
+	alt?: string
 }
 
 export const Home = async () => {
-	const { data } = await supabaseApi
-		.from('data system')
+	const { data: persons, error } = await supabaseApi
+		.from('persons')
 		.select('*')
-		.order('id', { ascending: false })
+		.order('id', { ascending: true })
 
-	if (!data) {
-		return null
-	}
+	if (error) throw error
 
 	return (
-		<div className='min-h-screen flex items-center justify-center flex-col'>
-			<div className='relative overflow-x-auto'>
-				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-					<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-						<tr>
-							<th scope='col' className='px-6 py-3'>
-								Name
-							</th>
-							<th scope='col' className='px-6 py-3'>
-								Age
-							</th>
-							<th scope='col' className='px-6 py-3'>
-								Profession
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{data.map((person: DataPerson) => {
-							return (
-								<tr
-									key={person.id}
-									className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'
-								>
-									<th
-										scope='row'
-										className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
-									>
-										{person.name}
-									</th>
-									<td className='px-6 py-4'>{person.age}</td>
-									<td className='px-6 py-4'>{person.profession}</td>
-								</tr>
-							)
-						})}
-					</tbody>
-				</table>
-			</div>
+		<div className='min-h-screen flex items-center justify-center flex-col px-6'>
+			<table className='max-w-2xl w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+				<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+					<tr>
+						<th scope='col' className='px-6 py-3'>
+							Nome
+						</th>
+						<th scope='col' className='px-6 py-3'>
+							Idade
+						</th>
+						<th scope='col' className='px-6 py-3'>
+							Profissão
+						</th>
+						<th>Avatar</th>
+					</tr>
+				</thead>
+				{persons.map((person: DataPerson) => {
+					return (
+						<TableBody
+							key={person.id}
+							name={person.name}
+							age={person.age}
+							profession={person.profession}
+							imageSrc={person.imageSrc}
+							alt={person.alt}
+						/>
+					)
+				})}
+			</table>
 		</div>
 	)
 }
