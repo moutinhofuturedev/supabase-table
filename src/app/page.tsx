@@ -1,4 +1,5 @@
-import { TableBody } from '@/app/components/table'
+import { TableBodyComponent } from '@/components/table-body-component'
+import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { supabaseApi } from '@/lib/supabase'
 
 interface DataPerson {
@@ -15,29 +16,26 @@ export const Home = async () => {
 		.from('persons')
 		.select('*')
 		.order('id', { ascending: true })
+		.returns<DataPerson[]>()
 
 	if (error) throw error
 
+	console.log(persons)
+
 	return (
-		<div className='min-h-screen flex items-center justify-center flex-col px-6'>
-			<table className='max-w-2xl w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-				<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-					<tr>
-						<th scope='col' className='px-6 py-3'>
-							Nome
-						</th>
-						<th scope='col' className='px-6 py-3'>
-							Idade
-						</th>
-						<th scope='col' className='px-6 py-3'>
-							Profissão
-						</th>
-						<th>Avatar</th>
-					</tr>
-				</thead>
+		<div className='h-screen w-full flex justify-center px-6 py-8'>
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead className='w-[300px]'>Nome</TableHead>
+						<TableHead>Idade</TableHead>
+						<TableHead>Profissão</TableHead>
+						<TableHead>Avatar</TableHead>
+					</TableRow>
+				</TableHeader>
 				{persons.map((person: DataPerson) => {
 					return (
-						<TableBody
+						<TableBodyComponent
 							key={person.id}
 							name={person.name}
 							age={person.age}
@@ -47,7 +45,7 @@ export const Home = async () => {
 						/>
 					)
 				})}
-			</table>
+			</Table>
 		</div>
 	)
 }
