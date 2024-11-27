@@ -1,53 +1,21 @@
-import { TableBodyComponent } from '@/components/table-body-component'
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { UserDataResponse } from '@/app/api/types/users'
+import { UserTable } from '@/components/table-component'
 import { supabaseApi } from '@/lib/supabase'
 
-interface DataPerson {
-	id: number
-	name: string
-	age: number
-	profession: string
-	imageSrc?: string
-	alt?: string
-}
-
-export const Home = async () => {
-	const { data: persons, error } = await supabaseApi
-		.from('persons')
+export const Users = async () => {
+	const { data: users, error } = await supabaseApi
+		.from('users')
 		.select('*')
 		.order('id', { ascending: true })
-		.returns<DataPerson[]>()
+		.returns<UserDataResponse[]>()
 
-	if (error) throw error
-
-	console.log(persons)
+	if (error) throw new Error(error.message)
 
 	return (
-		<div className='h-screen w-full flex justify-center px-6 py-8'>
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead className='w-[300px]'>Nome</TableHead>
-						<TableHead>Idade</TableHead>
-						<TableHead>Profissão</TableHead>
-						<TableHead>Avatar</TableHead>
-					</TableRow>
-				</TableHeader>
-				{persons.map((person: DataPerson) => {
-					return (
-						<TableBodyComponent
-							key={person.id}
-							name={person.name}
-							age={person.age}
-							profession={person.profession}
-							imageSrc={person.imageSrc}
-							alt={person.alt}
-						/>
-					)
-				})}
-			</Table>
+		<div className='h-screen flex justify-center px-6 py-8'>
+			<UserTable initialData={users} />
 		</div>
 	)
 }
 
-export default Home
+export default Users
