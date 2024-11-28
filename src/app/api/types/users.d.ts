@@ -5,4 +5,5 @@ export interface UserDataResponse {
 	profession: string
 	imageSrc?: string
 	alt?: string
+	createdAt: Date
 }

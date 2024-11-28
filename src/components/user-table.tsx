@@ -2,6 +2,7 @@
 import { UserDataResponse } from '@/app/api/types/users'
 import { api } from '@/lib/axios'
 import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import Image from 'next/image'
 import {
 	Table,
@@ -32,10 +33,11 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 		<Table>
 			<TableHeader>
 				<TableRow>
-					<TableHead className='w-[300px]'>Nome</TableHead>
+					<TableHead className='w-[280px]'>Nome</TableHead>
 					<TableHead>Idade</TableHead>
 					<TableHead>Profissão</TableHead>
 					<TableHead>Avatar</TableHead>
+					<TableHead className='w-[150px]'>Data de cadastro</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
@@ -57,6 +59,9 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 										loading='lazy'
 									/>
 								)}
+							</TableCell>
+							<TableCell>
+								{dayjs(user.createdAt).format('DD MMM YYYY')}
 							</TableCell>
 						</TableRow>
 					)
