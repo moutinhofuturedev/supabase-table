@@ -20,7 +20,7 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 	const { data: users } = useQuery<UserDataResponse[]>({
 		queryKey: ['users'],
 		queryFn: async () => {
-			const response = await api.get('/user')
+			const response = await api.get('/users')
 
 			return response.data
 		},
