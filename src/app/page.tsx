@@ -9,7 +9,11 @@ export const Users = async () => {
 		.order('id', { ascending: true })
 		.returns<UserDataResponse[]>()
 
-	if (error) throw new Error(error.message)
+	if (error) {
+		console.error(error)
+
+		return null
+	}
 
 	return (
 		<div className='h-screen flex justify-center px-6 py-8'>
