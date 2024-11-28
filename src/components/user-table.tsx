@@ -1,7 +1,8 @@
 'use client'
 import { UserDataResponse } from '@/app/api/types/users'
+import { api } from '@/lib/axios'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import {
 	Table,
 	TableBody,
@@ -16,18 +17,16 @@ interface UsersDataProps {
 }
 
 export const UserTable = ({ initialData }: UsersDataProps) => {
-	const [users, setUsers] = useState<UserDataResponse[]>(initialData)
+	const { data: users } = useQuery<UserDataResponse[]>({
+		queryKey: ['users'],
+		queryFn: async () => {
+			const response = await api.get('/user')
 
-	const getUsers = async () => {
-		const data = await fetch('/api')
-		const response: UserDataResponse[] = await data.json()
-
-		setUsers(response)
-	}
-
-	useEffect(() => {
-		getUsers()
-	}, [])
+			return response.data
+		},
+		initialData,
+		staleTime: 1000 * 60 * 10,
+	})
 
 	return (
 		<Table>
@@ -40,7 +39,7 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{users.map(user => {
+				{users?.map(user => {
 					return (
 						<TableRow key={user.id}>
 							<TableCell>{user.name}</TableCell>

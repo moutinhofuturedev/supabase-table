@@ -1,5 +1,5 @@
 import { UserDataResponse } from '@/app/api/types/users'
-import { UserTable } from '@/components/table-component'
+import { UserTable } from '@/components/user-table'
 import { supabaseApi } from '@/lib/supabase'
 
 export const Users = async () => {
