@@ -10,9 +10,7 @@ const Users = async () => {
 		.returns<UserDataResponse[]>()
 
 	if (error) {
-		console.error(error)
-
-		return null
+		throw new Error('Falha ao carregar usuários')
 	}
 
 	return (
