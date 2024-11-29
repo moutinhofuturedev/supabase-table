@@ -2,7 +2,7 @@ import { UserDataResponse } from '@/app/api/types/users'
 import { UserTable } from '@/components/user-table'
 import { supabaseApi } from '@/lib/supabase'
 
-export const Users = async () => {
+const Users = async () => {
 	const { data: users, error } = await supabaseApi
 		.from('users')
 		.select('*')
