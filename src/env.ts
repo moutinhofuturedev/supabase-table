@@ -1,8 +1,21 @@
-import zod from 'zod'
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
-const envSchema = zod.object({
-	NEXT_PUBLIC_SUPABASE_URL: zod.string().url(),
-	SUPABASE_SERVICE_ROLE_KEY: zod.string(),
+export const env = createEnv({
+	server: {
+		SUPABASE_URL: z.string().url(),
+		SUPABASE_SECRET_KEY: z.string(),
+	},
+
+	client: {
+		NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+		NEXT_PUBLIC_API_URL: z.string().url(),
+	},
+
+	runtimeEnv: {
+		SUPABASE_URL: process.env.SUPABASE_URL,
+		SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
+		NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+		NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+	},
 })
-
-export const env = envSchema.parse(process.env)
