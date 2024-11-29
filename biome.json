@@ -21,7 +21,8 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noShadowRestrictedNames": "off"
       },
       "a11y": {
         "useButtonType": "off",
