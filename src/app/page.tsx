@@ -13,11 +13,7 @@ const Users = async () => {
 		throw new Error('Falha ao carregar usuários')
 	}
 
-	return (
-		<div className='h-screen flex justify-center px-6 py-8'>
-			<UserTable initialData={users} />
-		</div>
-	)
+	return <UserTable initialData={users} />
 }
 
 export default Users
