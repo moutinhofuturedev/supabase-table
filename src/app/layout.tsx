@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/toaster'
 import { ReactQueryProvider } from '@/lib/react-query-provider'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -29,9 +32,12 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center flex-col px-6 py-4`}
 			>
+				<Analytics />
+				<SpeedInsights />
 				<Toaster />
+				<Header />
 				<ReactQueryProvider>{children}</ReactQueryProvider>
 			</body>
 		</html>

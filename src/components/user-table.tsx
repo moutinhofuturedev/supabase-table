@@ -31,7 +31,7 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 
 	return (
 		<Table>
-			<TableHeader>
+			<TableHeader className='bg-muted'>
 				<TableRow>
 					<TableHead className='w-[280px]'>Nome</TableHead>
 					<TableHead>Idade</TableHead>
@@ -52,8 +52,8 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 									<Image
 										src={user.imageSrc}
 										alt={user.alt}
-										width={50}
-										height={50}
+										width={40}
+										height={40}
 										sizes='auto'
 										className='rounded-full'
 										loading='lazy'
