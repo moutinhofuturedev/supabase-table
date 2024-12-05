@@ -26,18 +26,20 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 			return response.data
 		},
 		initialData,
-		staleTime: 1000 * 60 * 10,
+		staleTime: 1000 * 60, // 1 minute
 	})
 
 	return (
 		<Table>
-			<TableHeader className='bg-muted'>
-				<TableRow>
-					<TableHead className='w-[280px]'>Nome</TableHead>
-					<TableHead>Idade</TableHead>
-					<TableHead>Profissão</TableHead>
-					<TableHead>Avatar</TableHead>
-					<TableHead className='w-[150px]'>Data de cadastro</TableHead>
+			<TableHeader>
+				<TableRow className='bg-zinc-500 hover:bg-zinc-500'>
+					<TableHead className='w-[280px] text-zinc-50'>Nome</TableHead>
+					<TableHead className='text-zinc-50'>Idade</TableHead>
+					<TableHead className='text-zinc-50'>Profissão</TableHead>
+					<TableHead className='text-zinc-50'>Avatar</TableHead>
+					<TableHead className='w-[150px] text-zinc-50'>
+						Data de cadastro
+					</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
