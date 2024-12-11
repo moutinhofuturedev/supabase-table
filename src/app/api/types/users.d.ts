@@ -3,7 +3,7 @@ export interface UserDataResponse {
 	name: string
 	age: number
 	profession: string
-	imageSrc?: string
-	alt?: string
-	createdAt: Date
+	imageSrc: string | null
+	alt: string | null
+	createdAt: Date | null
 }
