@@ -2,7 +2,7 @@ import { supabaseApi } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 import type { UserDataResponse } from '../types/users'
 
-export async function GET() {
+export const GET = async () => {
 	try {
 		// Buscar os usuários do Supabase
 		const { data: users, error } = await supabaseApi
@@ -15,14 +15,6 @@ export async function GET() {
 			return NextResponse.json(
 				{ error: 'Erro ao buscar usuários' },
 				{ status: 500 },
-			)
-		}
-
-		// Verificar se há usuários
-		if (!users || users.length === 0) {
-			return NextResponse.json(
-				{ message: 'Nenhum usuário encontrado' },
-				{ status: 404 },
 			)
 		}
 

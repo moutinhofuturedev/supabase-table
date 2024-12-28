@@ -2,7 +2,7 @@ import { supabaseApi } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 import type { UserDataResponse } from '../types/users'
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
 	try {
 		// Extrair os dados do corpo da requisição
 		const { name, age, profession, imageSrc, alt } =
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 		}
 
 		// Retornar os dados do usuário criado
-		return NextResponse.json({ user: data[0] })
+		return NextResponse.json(data[0])
 	} catch (error) {
 		console.error('Erro inesperado:', error)
 		return NextResponse.json(
