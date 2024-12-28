@@ -1,7 +1,7 @@
 'use client'
 import { UserDataResponse } from '@/app/api/types/users'
 import { api } from '@/lib/axios'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import ptBR from 'dayjs/locale/pt-br'
 import Image from 'next/image'
@@ -13,14 +13,16 @@ import {
 	TableHeader,
 	TableRow,
 } from './ui/table'
+import { Button } from './ui/button'
 
 dayjs.locale(ptBR)
 
-interface UsersDataProps {
+interface InitialDataProps {
 	initialData: UserDataResponse[]
 }
 
-export const UserTable = ({ initialData }: UsersDataProps) => {
+export const UserTable = ({ initialData }: InitialDataProps) => {
+	const queryClient = useQueryClient()
 	const { data: users } = useQuery<UserDataResponse[]>({
 		queryKey: ['users'],
 		queryFn: async () => {
@@ -32,9 +34,20 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 		staleTime: 1000 * 60 * 5,
 	})
 
+	const { mutateAsync: removeUser, reset } = useMutation({
+		mutationFn: async (id: number) => {
+			await api.delete(`/users/${id}`)
+		},
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ['users'] })
+
+			reset()
+		}
+	})
+
 	return (
 		<>
-			{users.length > 0 ? (
+			{users?.length > 0 ? (
 				<Table>
 					<TableHeader>
 						<TableRow className='bg-zinc-500 hover:bg-zinc-500'>
@@ -45,10 +58,12 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 							<TableHead className='w-[150px] text-zinc-50'>
 								Data de cadastro
 							</TableHead>
+							<TableHead className='w-[100px]' />
+							<TableHead className='w-[100px]' />
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{users?.map(user => {
+						{users.map(user => {
 							return (
 								<TableRow key={user.id}>
 									<TableCell>{user.name}</TableCell>
@@ -70,6 +85,12 @@ export const UserTable = ({ initialData }: UsersDataProps) => {
 									<TableCell>
 										{user.createdAt &&
 											dayjs(user.createdAt).format('DD MMM YYYY')}
+									</TableCell>
+									<TableCell>
+										<Button variant='secondary' size='sm'>Editar</Button>
+									</TableCell>
+									<TableCell>
+										<Button variant='destructive' size='sm' onClick={() => removeUser(user.id)}>Deletar</Button>
 									</TableCell>
 								</TableRow>
 							)
