@@ -4,17 +4,18 @@ import z from 'zod'
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Extrair o ID do usuário dos parâmetros da rota
-    const id = z.string().parse(params.id)
+    const { id } = await params
+    const validatedId =  z.string().parse(id)
 
     // Remover o usuário do Supabase
     const { error } = await supabaseApi
       .from('users')
       .delete()
-      .eq('id', id)
+      .eq('id', validatedId)
 
     if (error) {
       console.error('Erro ao remover usuário:', error)
