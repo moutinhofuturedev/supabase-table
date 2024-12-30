@@ -1,10 +1,9 @@
 'use client'
-
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import IconSupabase from '../../public/icon-header.svg'
+import { CreateUser } from './create-user'
 
 export function Header() {
 	return (
@@ -30,20 +29,7 @@ export function Header() {
 						/>
 					</div>
 				</div>
-				<nav className='flex items-center gap-4'>
-					<Link
-						href='#'
-						className='text-sm font-medium text-muted-foreground hover:text-primary transition-colors'
-					>
-						Usuários
-					</Link>
-					<Link
-						href='#'
-						className='text-sm font-medium text-muted-foreground hover:text-primary transition-colors'
-					>
-						Relatórios
-					</Link>
-				</nav>
+				<CreateUser />
 			</div>
 		</header>
 	)
