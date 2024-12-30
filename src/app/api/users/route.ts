@@ -8,6 +8,7 @@ export const GET = async () => {
 		const { data: users, error } = await supabaseApi
 			.from('users')
 			.select('*')
+			.order('createdAt', { ascending: false })
 			.returns<UserDataResponse[]>()
 
 		if (error) {

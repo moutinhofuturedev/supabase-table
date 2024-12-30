@@ -16,6 +16,7 @@ import {
 	TableRow,
 } from './ui/table'
 import { Button } from './ui/button'
+import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog'
 
 dayjs.locale(ptBR)
 
@@ -35,7 +36,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			return response.data
 		},
 		initialData,
-		staleTime: 1000 * 60 * 5,
+		// staleTime: 1000 * 60 * 5,
 
 		// Adiciona retry para tentativas em caso de erro
 		retry: 2,
@@ -110,6 +111,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 												sizes='auto'
 												className='rounded-full'
 												loading='lazy'
+												objectFit='cover'
 											/>
 										)}
 									</TableCell>
@@ -121,7 +123,31 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 										<Button variant='secondary' size='sm'>Editar</Button>
 									</TableCell>
 									<TableCell>
-										<Button variant='destructive' size='sm' onClick={() => removeUser(user.id)}>Deletar</Button>
+										<Dialog>
+											<DialogTrigger asChild>
+												<Button variant='destructive' size='sm'>Deletar</Button>
+											</DialogTrigger>
+											<DialogContent>
+												<DialogTitle className='text-lg'>
+													Deseja realmente deletar o usuário{' '}
+													<strong>{user.name}</strong>?
+												</DialogTitle>
+												<div className='flex justify-end space-x-4'>
+													<Button
+														variant='destructive'
+														size='sm'
+														onClick={() => removeUser(user.id)}
+													>
+														Sim
+													</Button>
+													<DialogClose asChild>
+													<Button variant="outline" size='sm'>
+														Não
+													</Button>
+													</DialogClose>
+												</div>
+											</DialogContent>
+										</Dialog>
 									</TableCell>
 								</TableRow>
 							)

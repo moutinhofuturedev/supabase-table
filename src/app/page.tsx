@@ -7,7 +7,7 @@ const Users = async () => {
 	const { data: users, error } = await supabaseApi
 		.from('users')
 		.select('*')
-		.order('createdAt', { ascending: true })
+		.order('createdAt', { ascending: false })
 		.returns<UserDataResponse[]>()
 
 	if (error) {
