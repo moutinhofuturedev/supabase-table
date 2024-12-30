@@ -1,17 +1,14 @@
 import { supabaseApi } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
-
-interface UserDataParams {
-  params: { id: string }
-}
+import z from 'zod'
 
 export async function DELETE(
-  request: Request,
-  { params }: UserDataParams
+  _: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
     // Extrair o ID do usuário dos parâmetros da rota
-    const { id } = params
+    const id = z.string().parse(params.id)
 
     // Remover o usuário do Supabase
     const { error } = await supabaseApi
