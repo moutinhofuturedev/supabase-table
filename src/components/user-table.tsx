@@ -36,7 +36,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			return response.data
 		},
 		initialData,
-		// staleTime: 1000 * 60 * 5,
+		staleTime: Infinity,
 
 		// Adiciona retry para tentativas em caso de erro
 		retry: 2,
