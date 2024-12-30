@@ -41,7 +41,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		retry: 2,
 		throwOnError(error) {
 			toast({
-				title: 'Erro',
+				title: 'Erro ao buscar usuários',
 				description: error.message,
 				variant: 'destructive',
 			})
@@ -67,7 +67,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		},
 		onError: async (error) => {
 			toast({
-				title: 'Erro',
+				title: 'Erro ao deletar usuário',
 				description: error.message,
 				variant: 'destructive',
 			})
