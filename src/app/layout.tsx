@@ -35,8 +35,8 @@ export default function RootLayout({
 			>
 				<Analytics />
 				<SpeedInsights />
-				<Toaster />
 				<ReactQueryProvider>{children}</ReactQueryProvider>
+				<Toaster />
 			</body>
 		</html>
 	)

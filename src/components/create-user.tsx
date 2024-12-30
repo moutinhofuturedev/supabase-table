@@ -13,9 +13,11 @@ import { Label } from '@/components/ui/label'
 import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { QUERY_KEY } from '@/constants/query-keys'
 
 const createUserSchema = z.object({
 	name: z.string(),
@@ -28,7 +30,9 @@ const createUserSchema = z.object({
 type CreateUserType = z.infer<typeof createUserSchema>
 
 export const CreateUser = () => {
+	const { toast } = useToast()
 	const queryClient = useQueryClient()
+
 	const {
 		register,
 		handleSubmit,
@@ -56,7 +60,20 @@ export const CreateUser = () => {
 		},
 		onSuccess: async () => {
 			reset()
-			await queryClient.invalidateQueries({ queryKey: ['users'] })
+			toast({
+				title: 'Sucesso',
+				description: 'Usuário cadastrado.',
+			})
+			
+			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
+		},
+		throwOnError(error) {
+				toast({
+					title: 'Erro ao cadastrar usuário',
+					description: error.message,
+					variant: 'destructive',
+				})
+				return false
 		},
 	})
 

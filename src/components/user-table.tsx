@@ -2,6 +2,8 @@
 import { UserDataResponse } from '@/app/api/types/users'
 import { api } from '@/lib/axios'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { QUERY_KEY } from '@/constants/query-keys'
+import { useToast } from "@/hooks/use-toast"
 import dayjs from 'dayjs'
 import ptBR from 'dayjs/locale/pt-br'
 import Image from 'next/image'
@@ -22,9 +24,11 @@ interface InitialDataProps {
 }
 
 export const UserTable = ({ initialData }: InitialDataProps) => {
+	const { toast } = useToast()
 	const queryClient = useQueryClient()
+
 	const { data: users } = useQuery<UserDataResponse[]>({
-		queryKey: ['users'],
+		queryKey: QUERY_KEY.users,
 		queryFn: async () => {
 			const response = await api.get('/users')
 
@@ -32,16 +36,43 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		},
 		initialData,
 		staleTime: 1000 * 60 * 5,
+
+		// Adiciona retry para tentativas em caso de erro
+		retry: 2,
+		throwOnError(error) {
+			toast({
+				title: 'Erro',
+				description: error.message,
+				variant: 'destructive',
+			})
+			return false
+		},
 	})
 
-	const { mutateAsync: removeUser, reset } = useMutation({
+	const { mutateAsync: removeUser, reset } =  useMutation({
 		mutationFn: async (id: number) => {
-			await api.delete(`/users/${id}`)
+			const response = await api.delete(`/users/${id}`)
+
+			return response.data
 		},
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['users'] })
-
 			reset()
+			
+			toast({
+				title: 'Sucesso',
+				description: 'Usuário deletado.',
+			})
+			
+			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
+		},
+		onError: async (error) => {
+			toast({
+				title: 'Erro',
+				description: error.message,
+				variant: 'destructive',
+			})
+
+			await queryClient.setQueryData(QUERY_KEY.users, initialData)
 		}
 	})
 
