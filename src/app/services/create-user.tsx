@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/app/components/ui/button'
 import {
 	Dialog,
 	DialogContent,
@@ -7,12 +7,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { QUERY_KEY } from '@/constants/query-keys'
-import { useToast } from '@/hooks/use-toast'
-import { api } from '@/lib/axios'
+} from '@/app/components/ui/dialog'
+import { Input } from '@/app/components/ui/input'
+import { Label } from '@/app/components/ui/label'
+import { QUERY_KEY } from '@/app/constants/query-keys'
+import { useToast } from '@/app/hooks/use-toast'
+import { api } from '@/app/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
@@ -63,6 +63,7 @@ export const CreateUser = () => {
 			toast({
 				title: 'Sucesso',
 				description: 'Usuário cadastrado.',
+				style: { background: '#16a34a', color: '#f0fdf4' },
 			})
 
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })

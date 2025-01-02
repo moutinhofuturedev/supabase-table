@@ -1,9 +1,9 @@
 'use client'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/app/components/ui/input'
+import { CreateUser } from '@/app/services/create-user'
 import { Search } from 'lucide-react'
 import Image from 'next/image'
-import IconSupabase from '../../public/icon-header.svg'
-import { CreateUser } from './create-user'
+import IconSupabase from '../../../../public/icon-header.svg'
 
 export function Header() {
 	return (

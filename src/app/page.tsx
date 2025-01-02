@@ -1,7 +1,7 @@
-import { UserDataResponse } from '@/app/api/types/users'
-import { Header } from '@/components/header'
-import { UserTable } from '@/components/user-table'
-import { supabaseApi } from '@/lib/supabase'
+import { Header } from '@/app/components/layout/header'
+import { supabaseApi } from '@/app/lib/supabase'
+import { UserTable } from '@/app/services/user-table'
+import { UserDataResponse } from '@/app/types/users'
 
 const Users = async () => {
 	const { data: users, error } = await supabaseApi

@@ -1,12 +1,12 @@
 import { Loader2 } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import {
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from './ui/dialog'
+} from '../ui/dialog'
 
 interface DeleteDialogProps {
 	name: string

@@ -1,14 +1,6 @@
 'use client'
-import { UserDataResponse } from '@/app/api/types/users'
-import { QUERY_KEY } from '@/constants/query-keys'
-import { useToast } from '@/hooks/use-toast'
-import { api } from '@/lib/axios'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import dayjs from 'dayjs'
-import ptBR from 'dayjs/locale/pt-br'
-import Image from 'next/image'
-import { DeleteDialog } from './delete-dialog'
-import { Button } from './ui/button'
+import { DeleteDialog } from '@/app/components/layout/delete-dialog'
+import { Button } from '@/app/components/ui/button'
 import {
 	Table,
 	TableBody,
@@ -16,7 +8,15 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from './ui/table'
+} from '@/app/components/ui/table'
+import { QUERY_KEY } from '@/app/constants/query-keys'
+import { useToast } from '@/app/hooks/use-toast'
+import { api } from '@/app/lib/axios'
+import { UserDataResponse } from '@/app/types/users'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import ptBR from 'dayjs/locale/pt-br'
+import Image from 'next/image'
 
 dayjs.locale(ptBR)
 
@@ -66,6 +66,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			toast({
 				title: 'Sucesso',
 				description: 'Usuário deletado.',
+				style: { background: '#16a34a', color: '#f0fdf4' },
 			})
 
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })

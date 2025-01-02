@@ -1,4 +1,4 @@
-import { supabaseApi } from '@/lib/supabase'
+import { supabaseApi } from '@/app/lib/supabase'
 import { NextResponse } from 'next/server'
 import z from 'zod'
 
