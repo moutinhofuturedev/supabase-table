@@ -1,12 +1,14 @@
 'use client'
 import { UserDataResponse } from '@/app/api/types/users'
-import { api } from '@/lib/axios'
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { QUERY_KEY } from '@/constants/query-keys'
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from '@/hooks/use-toast'
+import { api } from '@/lib/axios'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import ptBR from 'dayjs/locale/pt-br'
 import Image from 'next/image'
+import { DeleteDialog } from './delete-dialog'
+import { Button } from './ui/button'
 import {
 	Table,
 	TableBody,
@@ -15,8 +17,6 @@ import {
 	TableHeader,
 	TableRow,
 } from './ui/table'
-import { Button } from './ui/button'
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog'
 
 dayjs.locale(ptBR)
 
@@ -36,7 +36,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			return response.data
 		},
 		initialData,
-		staleTime: Infinity,
+		staleTime: Number.POSITIVE_INFINITY, // Evita o cache ser limpo automaticamente pelo react-query
 
 		// Adiciona retry para tentativas em caso de erro
 		retry: 2,
@@ -50,7 +50,11 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		},
 	})
 
-	const { mutateAsync: removeUser, reset } =  useMutation({
+	const {
+		mutateAsync: removeUser,
+		reset,
+		isPending,
+	} = useMutation({
 		mutationFn: async (id: number) => {
 			const response = await api.delete(`/users/${id}`)
 
@@ -58,15 +62,15 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		},
 		onSuccess: async () => {
 			reset()
-			
+
 			toast({
 				title: 'Sucesso',
 				description: 'Usuário deletado.',
 			})
-			
+
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
 		},
-		onError: async (error) => {
+		onError: async error => {
 			toast({
 				title: 'Erro ao deletar usuário',
 				description: error.message,
@@ -74,7 +78,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			})
 
 			await queryClient.setQueryData(QUERY_KEY.users, initialData)
-		}
+		},
 	})
 
 	return (
@@ -111,7 +115,6 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 												sizes='auto'
 												className='rounded-full'
 												loading='lazy'
-												objectFit='cover'
 											/>
 										)}
 									</TableCell>
@@ -120,34 +123,16 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 											dayjs(user.createdAt).format('DD MMM YYYY')}
 									</TableCell>
 									<TableCell>
-										<Button variant='secondary' size='sm'>Editar</Button>
+										<Button variant='secondary' size='sm'>
+											Editar
+										</Button>
 									</TableCell>
 									<TableCell>
-										<Dialog>
-											<DialogTrigger asChild>
-												<Button variant='destructive' size='sm'>Deletar</Button>
-											</DialogTrigger>
-											<DialogContent>
-												<DialogTitle className='text-lg'>
-													Deseja realmente deletar o usuário{' '}
-													<strong>{user.name}</strong>?
-												</DialogTitle>
-												<div className='flex justify-end space-x-4'>
-													<Button
-														variant='destructive'
-														size='sm'
-														onClick={() => removeUser(user.id)}
-													>
-														Sim
-													</Button>
-													<DialogClose asChild>
-													<Button variant="outline" size='sm'>
-														Não
-													</Button>
-													</DialogClose>
-												</div>
-											</DialogContent>
-										</Dialog>
+										<DeleteDialog
+											name={user.name}
+											onConfirm={() => removeUser(user.id)}
+											isPending={isPending}
+										/>
 									</TableCell>
 								</TableRow>
 							)

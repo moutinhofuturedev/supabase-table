@@ -5,5 +5,5 @@ export interface UserDataResponse {
 	profession: string
 	imageSrc: string | null
 	alt: string | null
-	createdAt: Date | null
+	createdAt: Date
 }
