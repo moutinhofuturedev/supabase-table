@@ -1,14 +1,7 @@
 import { supabaseApi } from '@/app/lib/supabase'
+import { userSchema } from '@/app/types/user-schema'
 import { NextResponse } from 'next/server'
 import z from 'zod'
-
-const updateUserSchema = z.object({
-	name: z.string().min(1).optional(),
-	age: z.number().min(0).optional(),
-	profession: z.string().min(1).optional(),
-	imageSrc: z.string().url().optional(),
-	alt: z.string().optional(),
-})
 
 export async function DELETE(
 	_: Request,
@@ -58,7 +51,7 @@ export async function PATCH(
 
 		// Extrair e validar os dados do corpo da requisição
 		const body = await request.json()
-		const validatedData = updateUserSchema.parse(body)
+		const validatedData = userSchema.parse(body)
 
 		// Atualizar o usuário no Supabase
 		const { data, error } = await supabaseApi

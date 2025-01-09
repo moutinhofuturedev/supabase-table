@@ -1,6 +1,6 @@
 import { supabaseApi } from '@/app/lib/supabase'
+import type { UserDataResponse } from '@/app/types/users'
 import { NextResponse } from 'next/server'
-import type { UserDataResponse } from '../../types/users'
 
 export const GET = async () => {
 	try {
