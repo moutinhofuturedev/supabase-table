@@ -1,6 +1,5 @@
 'use client'
 import { DeleteDialog } from '@/app/components/layout/delete-dialog'
-import { Button } from '@/app/components/ui/button'
 import {
 	Table,
 	TableBody,
@@ -17,6 +16,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import ptBR from 'dayjs/locale/pt-br'
 import Image from 'next/image'
+import { UpdateUser } from './update-user'
 
 dayjs.locale(ptBR)
 
@@ -55,7 +55,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 		reset,
 		isPending,
 	} = useMutation({
-		mutationFn: async (id: number) => {
+		mutationFn: async (id: string) => {
 			const response = await api.delete(`/users/${id}`)
 
 			return response.data
@@ -120,13 +120,17 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 										)}
 									</TableCell>
 									<TableCell>
-										{user.createdAt &&
-											dayjs(user.createdAt).format('DD MMM YYYY')}
+										{dayjs(user.createdAt).format('DD MMM YYYY')}
 									</TableCell>
 									<TableCell>
-										<Button variant='secondary' size='sm'>
-											Editar
-										</Button>
+										<UpdateUser
+											id={user.id}
+											name={user.name}
+											age={user.age}
+											profession={user.profession}
+											imageSrc={user.imageSrc}
+											alt={user.alt}
+										/>
 									</TableCell>
 									<TableCell>
 										<DeleteDialog
