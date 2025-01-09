@@ -13,19 +13,12 @@ import { Label } from '@/app/components/ui/label'
 import { QUERY_KEY } from '@/app/constants/query-keys'
 import { useToast } from '@/app/hooks/use-toast'
 import { api } from '@/app/lib/axios'
+import { userSchema as createUserSchema } from '@/app/types/user-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
-const createUserSchema = z.object({
-	name: z.string().min(1, { message: 'Nome é obrigatório' }),
-	age: z.coerce.number().min(1, 'Idade é obrigatório'),
-	profession: z.string().min(1, 'Profissão é obrigatório'),
-	imageSrc: z.string().nullable() || z.string().url(),
-	alt: z.string().nullable(),
-})
 
 type CreateUserType = z.infer<typeof createUserSchema>
 
@@ -40,6 +33,7 @@ export const CreateUser = () => {
 		formState: { isSubmitting, isLoading, errors },
 	} = useForm<CreateUserType>({
 		resolver: zodResolver(createUserSchema),
+		mode: 'onBlur', // Validação ao sair do input
 	})
 
 	const { mutateAsync: crateUserForm } = useMutation({
