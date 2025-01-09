@@ -1,9 +1,9 @@
 export interface UserDataResponse {
-	id: number
+	id: string
 	name: string
 	age: number
 	profession: string
 	imageSrc: string | null
 	alt: string | null
-	createdAt: Date | null
+	createdAt: Date
 }

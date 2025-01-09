@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/app/components/ui/button'
 import {
 	Dialog,
 	DialogContent,
@@ -7,25 +7,18 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { api } from '@/lib/axios'
+} from '@/app/components/ui/dialog'
+import { Input } from '@/app/components/ui/input'
+import { Label } from '@/app/components/ui/label'
+import { QUERY_KEY } from '@/app/constants/query-keys'
+import { useToast } from '@/app/hooks/use-toast'
+import { api } from '@/app/lib/axios'
+import { userSchema as createUserSchema } from '@/app/types/user-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { QUERY_KEY } from '@/constants/query-keys'
-
-const createUserSchema = z.object({
-	name: z.string(),
-	age: z.coerce.number(),
-	profession: z.string(),
-	imageSrc: z.string().url().nullable(),
-	alt: z.string().nullable(),
-})
 
 type CreateUserType = z.infer<typeof createUserSchema>
 
@@ -37,9 +30,10 @@ export const CreateUser = () => {
 		register,
 		handleSubmit,
 		reset,
-		formState: { isSubmitting, isLoading },
+		formState: { isSubmitting, isLoading, errors },
 	} = useForm<CreateUserType>({
 		resolver: zodResolver(createUserSchema),
+		mode: 'onBlur', // Validação ao sair do input
 	})
 
 	const { mutateAsync: crateUserForm } = useMutation({
@@ -63,17 +57,18 @@ export const CreateUser = () => {
 			toast({
 				title: 'Sucesso',
 				description: 'Usuário cadastrado.',
+				style: { background: '#16a34a', color: '#f0fdf4' },
 			})
-			
+
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
 		},
 		throwOnError(error) {
-				toast({
-					title: 'Erro ao cadastrar usuário',
-					description: error.message,
-					variant: 'destructive',
-				})
-				return false
+			toast({
+				title: 'Erro ao cadastrar usuário',
+				description: error.message,
+				variant: 'destructive',
+			})
+			return false
 		},
 	})
 
@@ -116,9 +111,13 @@ export const CreateUser = () => {
 							placeholder='digite o nome'
 							type='text'
 							className='col-span-3'
-							required
 							{...register('name')}
 						/>
+						{errors.name && (
+							<span className='ml-36 col-span-4 text-red-500 text-sm'>
+								{errors.name.message}
+							</span>
+						)}
 					</div>
 					<div className='grid grid-cols-4 items-center gap-4'>
 						<Label htmlFor='age'>Idade</Label>
@@ -127,9 +126,13 @@ export const CreateUser = () => {
 							placeholder='digite a idade'
 							type='number'
 							className='col-span-3'
-							required
 							{...register('age')}
 						/>
+						{errors.age && (
+							<span className='ml-36 col-span-4 text-red-500 text-sm'>
+								{errors.age.message}
+							</span>
+						)}
 					</div>
 					<div className='grid grid-cols-4 items-center gap-4'>
 						<Label htmlFor='profession'>Profissão</Label>
@@ -138,9 +141,13 @@ export const CreateUser = () => {
 							placeholder='digite a profissão'
 							type='text'
 							className='col-span-3'
-							required
 							{...register('profession')}
 						/>
+						{errors.profession && (
+							<span className='ml-36 col-span-4 text-red-500 text-sm'>
+								{errors.profession.message}
+							</span>
+						)}
 					</div>
 					<div className='grid grid-cols-4 items-center gap-4'>
 						<Label htmlFor='imageSrc'>Url da imagem</Label>
