@@ -36,7 +36,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			return response.data
 		},
 		initialData,
-		staleTime: Number.POSITIVE_INFINITY, // Evita o cache ser limpo automaticamente pelo react-query
+		staleTime: 1000 * 60 * 5, // 5 minutos
 
 		// Adiciona retry para tentativas em caso de erro
 		retry: 2,
