@@ -2,14 +2,10 @@ import { Header } from '@/app/components/layout/header'
 import { supabaseApi } from '@/app/lib/supabase'
 import { UserTable } from '@/app/services/user-table'
 import { UserDataResponse } from '@/app/types/users'
+import { cache } from 'react'
 
-const Users = async () => {
-	caches.keys().then(keys => {
-		keys.forEach(key => {
-			caches.delete(key)
-		})
-	})
-
+// função cacheada para buscar usuários
+const getUsers = cache(async () => {
 	const { data: users, error } = await supabaseApi
 		.from('users')
 		.select('*')
@@ -19,6 +15,12 @@ const Users = async () => {
 	if (error) {
 		throw new Error('Falha ao carregar usuários')
 	}
+
+	return users
+})
+
+const Users = async () => {
+	const users = await getUsers()
 
 	return (
 		<>
