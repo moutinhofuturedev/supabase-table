@@ -33,9 +33,9 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex items-center flex-col px-6 py-4`}
 			>
+				<ReactQueryProvider>{children}</ReactQueryProvider>
 				<Analytics />
 				<SpeedInsights />
-				<ReactQueryProvider>{children}</ReactQueryProvider>
 				<Toaster />
 			</body>
 		</html>
