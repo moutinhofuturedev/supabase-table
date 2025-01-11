@@ -4,6 +4,12 @@ import { UserTable } from '@/app/services/user-table'
 import { UserDataResponse } from '@/app/types/users'
 
 const Users = async () => {
+	caches.keys().then(keys => {
+		keys.forEach(key => {
+			caches.delete(key)
+		})
+	})
+
 	const { data: users, error } = await supabaseApi
 		.from('users')
 		.select('*')
