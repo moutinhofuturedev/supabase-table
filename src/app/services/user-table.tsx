@@ -15,6 +15,7 @@ import { UserDataResponse } from '@/app/types/users'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import ptBR from 'dayjs/locale/pt-br'
+import { revalidatePath } from 'next/cache'
 import Image from 'next/image'
 import { UpdateUser } from './update-user'
 
@@ -70,6 +71,8 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 			})
 
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
+
+			revalidatePath('/')
 		},
 		onError: async error => {
 			toast({
