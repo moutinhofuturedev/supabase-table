@@ -24,7 +24,7 @@ interface InitialDataProps {
 	initialData: UserDataResponse[]
 }
 
-export const UserTable = ({ initialData }: InitialDataProps) => {
+export const UserTable = ({ ...initialData }: InitialDataProps) => {
 	const { toast } = useToast()
 	const queryClient = useQueryClient()
 
@@ -35,7 +35,7 @@ export const UserTable = ({ initialData }: InitialDataProps) => {
 
 			return response.data
 		},
-		initialData,
+		...initialData,
 		staleTime: 1000 * 60 * 5, // 5 minutos
 
 		// Adiciona retry para tentativas em caso de erro
