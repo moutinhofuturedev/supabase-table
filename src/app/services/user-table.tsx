@@ -20,11 +20,11 @@ import { UpdateUser } from './update-user'
 
 dayjs.locale(ptBR)
 
-interface InitialDataProps {
-	initialData: UserDataResponse[]
-}
+// interface InitialDataProps {
+// 	initialData: UserDataResponse[]
+// }
 
-export const UserTable = ({ ...initialData }: InitialDataProps) => {
+export const UserTable = () => {
 	const { toast } = useToast()
 	const queryClient = useQueryClient()
 
@@ -35,7 +35,6 @@ export const UserTable = ({ ...initialData }: InitialDataProps) => {
 
 			return response.data
 		},
-		...initialData,
 		staleTime: 1000 * 60 * 5, // 5 minutos
 
 		// Adiciona retry para tentativas em caso de erro
@@ -78,13 +77,13 @@ export const UserTable = ({ ...initialData }: InitialDataProps) => {
 				variant: 'destructive',
 			})
 
-			await queryClient.setQueryData(QUERY_KEY.users, initialData)
+			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
 		},
 	})
 
 	return (
 		<>
-			{users?.length > 0 ? (
+			{users && users.length > 0 ? (
 				<Table>
 					<TableHeader>
 						<TableRow className='bg-zinc-500 hover:bg-zinc-500'>
