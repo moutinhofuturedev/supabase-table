@@ -70,14 +70,13 @@ export const UserTable = () => {
 
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
 		},
-		onError: async error => {
+		throwOnError(error) {
 			toast({
 				title: 'Erro ao deletar usuário',
 				description: error.message,
 				variant: 'destructive',
 			})
-
-			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
+			return false
 		},
 	})
 
