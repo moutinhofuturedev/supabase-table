@@ -21,7 +21,6 @@ import type { UserDataResponse } from '@/app/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import { revalidatePath } from 'next/cache'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -97,8 +96,6 @@ export const UpdateUser = ({
 				})
 
 				queryClient.setQueryData<UserDataResponse[]>(QUERY_KEY.users, updated)
-
-				revalidatePath('/')
 			}
 
 			reset()

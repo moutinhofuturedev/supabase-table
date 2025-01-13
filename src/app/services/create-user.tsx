@@ -17,7 +17,6 @@ import { userSchema as createUserSchema } from '@/app/types/user-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import { revalidatePath } from 'next/cache'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -62,8 +61,6 @@ export const CreateUser = () => {
 			})
 
 			await queryClient.invalidateQueries({ queryKey: QUERY_KEY.users })
-
-			revalidatePath('/')
 		},
 		throwOnError(error) {
 			toast({
