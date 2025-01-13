@@ -1,9 +1,9 @@
 import { Header } from '@/app/components/layout/header'
-// import { supabaseApi } from '@/app/lib/supabase'
 import { UserTable } from '@/app/services/user-table'
+// import { supabaseApi } from '@/app/lib/supabase'
 // import { UserDataResponse } from '@/app/types/users'
 
-const Users = () => {
+const Users = async () => {
 	// const { data: users, error } = await supabaseApi
 	// 	.from('users')
 	// 	.select('*')
