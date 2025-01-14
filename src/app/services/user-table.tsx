@@ -1,5 +1,6 @@
 'use client'
 import { DeleteDialog } from '@/app/components/layout/delete-dialog'
+import { Loading } from '@/app/components/layout/loading'
 import {
 	Table,
 	TableBody,
@@ -81,7 +82,7 @@ export const UserTable = () => {
 	})
 
 	const renderTable = () => {
-		if (isLoading) return <p>Carregando...</p>
+		if (isLoading) return <Loading />
 		if (!users || users.length === 0)
 			return (
 				<p className='text-center text-zinc-500'>Nenhum usuário encontrado.</p>
